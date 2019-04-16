@@ -4,6 +4,7 @@ import {
 } from 'antd';
 import './NormalLoginForm.css';
 import logo from '../../logo.svg';
+import {withRouter} from "react-router-dom";
 
 class NormalLoginForm extends React.Component {
     constructor(props) {
@@ -15,7 +16,7 @@ class NormalLoginForm extends React.Component {
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 console.log('Received values of form: ', values);
-                localStorage.setItem('user',values);
+                localStorage.setItem('user', JSON.stringify(values));
             }
         });
         this.props.history.push('/home');
@@ -24,7 +25,7 @@ class NormalLoginForm extends React.Component {
     render() {
         const {getFieldDecorator} = this.props.form;
         return (
-            <header className="App-header">
+            <div className="App-header">
                 <img src={logo} className="App-logo" alt="logo"/>
                 <Form onSubmit={this.handleSubmit} className="login-form">
                     <Form.Item>
@@ -57,11 +58,11 @@ class NormalLoginForm extends React.Component {
                         <a href="">register now!</a>
                     </Form.Item>
                 </Form>
-            </header>
+            </div>
         );
     }
 }
 
 const WrappedNormalLoginForm = Form.create({name: 'normal_login'})(NormalLoginForm);
 
-export default WrappedNormalLoginForm;
+export default withRouter(WrappedNormalLoginForm);

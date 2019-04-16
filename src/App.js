@@ -1,10 +1,10 @@
-import React, {Component} from 'react';
+import React from 'react';
 
 import './App.css';
 import NormalLoginForm from './component/login/NormalLoginForm';
 import About from './component/about/About';
 import Home from './component/home/Home';
-import {Layout, Menu, Breadcrumb, Icon} from 'antd';
+import {Layout, Menu} from 'antd';
 import MyHeader from "./component/header/MyHeader";
 
 import {
@@ -13,6 +13,8 @@ import {
     Switch,
     Redirect
 } from "react-router-dom";
+import RuleMng from "./component/ruleMng/ruleMng/RuleMng";
+import RuleCheck from "./component/ruleMng/ruleCheck/RuleCheck";
 
 const {SubMenu} = Menu;
 const {Content, Sider} = Layout;
@@ -32,6 +34,16 @@ const routes = [
         component: About,
         exact: true
     },
+    {
+        path: "/rule/ruleMng",
+        component: RuleMng,
+        exact: true
+    },
+    {
+        path: "/rule/ruleCheck",
+        component: RuleCheck,
+        exact: true
+    }
 ];
 
 function App() {

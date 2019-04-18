@@ -1,76 +1,83 @@
 import React, {Component} from 'react';
-import {Layout, Menu, Breadcrumb, Icon} from 'antd';
-import RuleMng from "../ruleMng/ruleMng/RuleMng";
-import {NavLink} from "react-router-dom";
-import RuleCheck from "../ruleMng/ruleCheck/RuleCheck";
+import {Tabs} from 'antd'
+import PluginConfig from "../ruleMng/PluginConfig/PluginConfig";
+import {Layout} from "antd/lib/index";
 
-import {
-    HashRouter as Router,
-    Route,
-    Switch,
-    Redirect
-} from "react-router-dom";
+const {Content} = Layout;
 
-const {SubMenu} = Menu;
-const {Content, Sider} = Layout;
-
-
-const routes = [
-    {
-        path: "/rule/ruleMng",
-        component: RuleMng,
-        exact: true
-    },
-    {
-        path: "/rule/ruleCheck",
-        component: RuleCheck,
-        exact: true
-    }
-];
-
-function RouteGen(route) {
-    return <Route path={route.path} component={route.component}/>;
-}
+const TabPane = Tabs.TabPane;
 
 class Home extends Component {
 
+    constructor(props) {
+        super(props);
+        this.newTabIndex = 0;
+
+        const panes = [
+            {title: '首页', content: 'welcome to ruleMng', key: '1', closable: false},
+            {title: '插件配置', content: <PluginConfig/>, key: '2'},
+
+        ];
+        this.state = {
+            activeKey: panes[0].key,
+            panes,
+        };
+    }
+
+
+    onChange = (activeKey) => {
+        this.setState({activeKey});
+    }
+
+    onEdit = (targetKey, action) => {
+        this[action](targetKey);
+    }
+
+    add = () => {
+        const panes = this.state.panes;
+        const activeKey = `newTab${this.newTabIndex++}`;
+        panes.push({title: 'New Tab', content: 'Content of new Tab', key: activeKey});
+        this.setState({panes, activeKey});
+    }
+
+    remove = (targetKey) => {
+        let activeKey = this.state.activeKey;
+        let lastIndex;
+        this.state.panes.forEach((pane, i) => {
+            if (pane.key === targetKey) {
+                lastIndex = i - 1;
+            }
+        });
+        const panes = this.state.panes.filter(pane => pane.key !== targetKey);
+        if (panes.length && activeKey === targetKey) {
+            if (lastIndex >= 0) {
+                activeKey = panes[lastIndex].key;
+            } else {
+                activeKey = panes[0].key;
+            }
+        }
+        this.setState({panes, activeKey});
+    }
+
 
     render() {
-        return (<Layout>
-            <Sider width={200} style={{background: '#fff'}}>
-                <Menu
-                    mode="inline"
-                    defaultSelectedKeys={['1']}
-                    defaultOpenKeys={['sub1']}
-                    style={{height: '100%', borderRight: 0}}
-                >
-                    <SubMenu key="sub1" title={<span><Icon type="notification"/>规则配置</span>}>
-                        <Menu.Item key="1"> <NavLink to='/rule/ruleMng'>插件配置</NavLink></Menu.Item>
-                        <Menu.Item key="2"><NavLink to='/rule/ruleCheck'>规则查询</NavLink></Menu.Item>
-                    </SubMenu>
-                    <SubMenu key="sub2" title={<span><Icon type="laptop"/>规则生命周期管理</span>}>
-                        <Menu.Item key="5">规则配置申请</Menu.Item>
-                        <Menu.Item key="6">规则审核</Menu.Item>
-                        <Menu.Item key="7">规则测试</Menu.Item>
-                    </SubMenu>
-                    <SubMenu key="sub3" title={<span><Icon type="user"/>规则视图</span>}>
-                        <Menu.Item key="9">管理规则视图</Menu.Item>
-                        <Menu.Item key="10">过程规则视图</Menu.Item>
-                    </SubMenu>
-                </Menu>
-            </Sider>
+        return (
 
-            <Layout style={{padding: '0 24px 24px'}}>
+            <Tabs
+                onChange={this.onChange}
+                activeKey={this.state.activeKey}
+                type="editable-card"
+                onEdit={this.onEdit}
+            >
+                {this.state.panes.map(pane =>
+                    <TabPane tab={pane.title} key={pane.key} closable={pane.closable}>
 
-                <Content style={{
-                    background: '#fff', padding: 24, margin: 0, minHeight: 280,
-                }}
-                >
-                    {}
-                </Content>
-            </Layout>
+                        {pane.content}
 
-        </Layout>);
+                    </TabPane>)}
+            </Tabs>
+
+        );
     }
 }
 

@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {Button, Card, Input, Table, Row, Col, Divider, Form} from 'antd'
+import ReactDOM from "react-dom";
 
 const {TextArea} = Input;
 
@@ -10,7 +11,7 @@ class RuleMng extends Component {
     }
     handleSubmit = (e) => {
         e.preventDefault();
-        this.props.form.validateFieldsAndScroll((err, values) => {
+        this.props.form.validateFields((err, values) => {
             if (!err) {
                 console.log('Received values of form: ', values);
             }
@@ -18,7 +19,8 @@ class RuleMng extends Component {
     }
 
     render() {
-        const dataSource = [{
+        const dataSource = [
+            {
             key: '1',
             id: 'CUST_AABB_11',
             name: '客户标签列表',
@@ -32,7 +34,8 @@ class RuleMng extends Component {
             description: '某客户所属标签'
         }];
 
-        const columns = [{
+        const columns = [
+            {
             title: '属性编码',
             dataIndex: 'id',
             key: 'id',
@@ -60,6 +63,7 @@ class RuleMng extends Component {
             ),
         }
         ];
+
         const onChange = (e) => {
             console.log(e);
         };
@@ -94,9 +98,7 @@ class RuleMng extends Component {
                     </Card>
                 </Form>
             </div>
-
         );
     }
 }
-
-export default RuleMng;
+export default Form.create()(RuleMng);

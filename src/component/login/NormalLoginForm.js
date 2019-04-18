@@ -2,7 +2,7 @@ import React from 'react';
 import {
     Form, Icon, Input, Button, Checkbox,
 } from 'antd';
-import './NormalLoginForm.css';
+import style from './NormalLoginForm.css';
 import logo from '../../logo.svg';
 import {withRouter} from "react-router-dom";
 
@@ -16,6 +16,7 @@ class NormalLoginForm extends React.Component {
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 console.log('Received values of form: ', values);
+                //缓存登录状态
                 localStorage.setItem('user', JSON.stringify(values));
             }
         });
@@ -27,7 +28,7 @@ class NormalLoginForm extends React.Component {
         return (
             <div className="App-header">
                 <img src={logo} className="App-logo" alt="logo"/>
-                <Form onSubmit={this.handleSubmit} className="login-form">
+                <Form onSubmit={this.handleSubmit} className={style.loginform}>
                     <Form.Item>
                         {getFieldDecorator('userName', {
                             rules: [{required: true, message: 'Please input your username!'}],
